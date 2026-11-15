@@ -1,4 +1,4 @@
-from jose import JWTError, jwt
+from jose import ExpiredSignatureError, JWTError, jwt
 from nanoid import generate
 
 from module.user.user_cases import UserLoad
@@ -15,7 +15,7 @@ def user_authentication(email: str, password: str) -> str | None:
             return None
 
         is_password = user_ctrl.password_validation(password, user.password)
-        if is_password:
+        if not is_password:
             return None
 
         access_token = user_ctrl.make_token_generation(
@@ -43,6 +43,9 @@ def user_token_content(token: str) -> tuple[str, str] | None:
 
         return (user_id, user_perfil)
 
+    except ExpiredSignatureError:
+        # ESSE É O ERRO ESPECÍFICO DE TOKEN EXPIRADO!
+        return (None, None)
     except JWTError as err:
         print(err)
         raise
@@ -75,3 +78,16 @@ def user_save(
     except Exception as err:
         print(err)
         raise
+
+
+def get_user_perfil(id: str):
+    user = user_ctrl.find_by_id(id)
+
+    user.name = user.name.title()
+
+    nome_list = user.name.split()
+    iniciais = "".join(e[0] for e in nome_list)
+
+    user.perfil = iniciais[:2]
+
+    return user

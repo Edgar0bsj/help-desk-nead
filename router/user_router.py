@@ -5,7 +5,11 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/user", tags=["Usuario"])
 templates = Jinja2Templates(directory="public")
 
-from module.user.user_facade import user_authentication, user_token_content
+from module.user.user_facade import (
+    get_user_perfil,
+    user_authentication,
+    user_token_content,
+)
 
 
 @router.get("/login", name="login")
@@ -40,7 +44,9 @@ async def user_auth(
             url="/user/login/?err=true", status_code=status.HTTP_303_SEE_OTHER
         )
 
-    response = RedirectResponse(url="/user/home", status_code=status.HTTP_303_SEE_OTHER)
+    response = RedirectResponse(
+        url="/user/ticket", status_code=status.HTTP_303_SEE_OTHER
+    )
 
     response.set_cookie(
         key="access_token",
@@ -53,8 +59,10 @@ async def user_auth(
     return response
 
 
-@router.get("/home", name="home")
-async def user_home(request: Request, access_token: str | None = Cookie(default=None)):
+@router.get("/ticket", name="ticket")
+async def user_ticket(
+    request: Request, access_token: str | None = Cookie(default=None)
+):
     if access_token is None:
         return RedirectResponse(
             url="/user/login/?err=true", status_code=status.HTTP_303_SEE_OTHER
@@ -62,11 +70,22 @@ async def user_home(request: Request, access_token: str | None = Cookie(default=
 
     user_id, user_perfil = user_token_content(access_token)
 
-    print("user_id", user_id)
-    print("user_perfil", user_perfil)
+    if (user_id is None) or (user_perfil is None):
+        return RedirectResponse(
+            url="/user/login/", status_code=status.HTTP_303_SEE_OTHER
+        )
+
+    user = get_user_perfil(user_id)
 
     return templates.TemplateResponse(
         request=request,
-        name="index.html",
-        context={},
+        name="ticket.html",
+        context={
+            "user": {
+                "name": user.name,
+                "email": user.email,
+                "role": user.role,
+                "perfil": user.perfil,
+            }
+        },
     )

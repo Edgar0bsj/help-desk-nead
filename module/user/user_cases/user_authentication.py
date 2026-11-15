@@ -13,7 +13,7 @@ class UserAuthentication:
     def __init__(self):
         self.SECRET_KEY = "ping_pong"
         self.ALGORITHM = "HS256"
-        self.ACCESS_TOKEN_EXPIRE_MINUTES = 30
+        self.ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
