@@ -17,14 +17,14 @@ async def user_ticket(
 ):
     if access_token is None:
         return RedirectResponse(
-            url="/user/login/?err=true", status_code=status.HTTP_303_SEE_OTHER
+            url="/auth/login/?err=true", status_code=status.HTTP_303_SEE_OTHER
         )
 
     user_id, user_perfil = user_token_content(access_token)
 
     if (user_id is None) or (user_perfil is None):
         return RedirectResponse(
-            url="/user/login/", status_code=status.HTTP_303_SEE_OTHER
+            url="/auth/login/", status_code=status.HTTP_303_SEE_OTHER
         )
 
     user = get_user_perfil(user_id)
@@ -40,4 +40,27 @@ async def user_ticket(
                 "perfil": user.perfil,
             }
         },
+    )
+
+
+@router.get("/add-ticket", name="add-ticket")
+async def user_add_ticket(
+    request: Request, access_token: str | None = Cookie(default=None)
+):
+    if access_token is None:
+        return RedirectResponse(
+            url="/auth/login/?err=true", status_code=status.HTTP_303_SEE_OTHER
+        )
+
+    user_id, user_perfil = user_token_content(access_token)
+
+    if (user_id is None) or (user_perfil is None):
+        return RedirectResponse(
+            url="/auth/login/", status_code=status.HTTP_303_SEE_OTHER
+        )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="add_ticket_form.html",
+        context={},
     )

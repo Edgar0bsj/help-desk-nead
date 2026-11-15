@@ -3,8 +3,12 @@
     <div class="sidebar-header">
       <div class="d-flex justify-content-between">
         <div class="logo">
-          <a href="index.html"
-            ><img src="/assets/images/logo/logo.png" alt="Logo" srcset=""
+          <a href="{{ url_for('ticket') }}"
+            ><img
+              src="/assets/images/logo/logo.png"
+              style="height: 40px; width: auto"
+              alt="Logo"
+              srcset=""
           /></a>
         </div>
         <div class="toggler">
@@ -18,10 +22,16 @@
       <ul class="menu">
         <li class="sidebar-title">Menu</li>
 
-        <li class="sidebar-item active">
+        <li class="sidebar-item">
           <a href="{{ url_for('ticket') }}" class="sidebar-link">
             <i class="bi bi-app-indicator"></i>
             <span>Tickes</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{{ url_for('add-ticket') }}" class="sidebar-link">
+            <i class="bi bi-file-earmark-plus"></i>
+            <span>Add Tickes</span>
           </a>
         </li>
         <li class="sidebar-title">Usuario</li>
