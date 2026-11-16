@@ -2,13 +2,13 @@ from fastapi import APIRouter, Cookie, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-router = APIRouter(prefix="/user", tags=["Usuario"])
-templates = Jinja2Templates(directory="public")
-
+from module.ticket.ticket_facade import get_tickets_user
 from module.user.user_facade import (
-    get_user_perfil,
     user_token_content,
 )
+
+router = APIRouter(prefix="/user", tags=["Usuario"])
+templates = Jinja2Templates(directory="public")
 
 
 @router.get("/ticket", name="ticket")
@@ -27,19 +27,12 @@ async def user_ticket(
             url="/auth/login/", status_code=status.HTTP_303_SEE_OTHER
         )
 
-    user = get_user_perfil(user_id)
+    tickets = get_tickets_user(user_id)
 
     return templates.TemplateResponse(
         request=request,
         name="ticket.html",
-        context={
-            "user": {
-                "name": user.name,
-                "email": user.email,
-                "role": user.role,
-                "perfil": user.perfil,
-            }
-        },
+        context={"tickets": tickets},
     )
 
 
@@ -62,5 +55,5 @@ async def user_add_ticket(
     return templates.TemplateResponse(
         request=request,
         name="add_ticket_form.html",
-        context={},
+        context={"user_id": user_id},
     )

@@ -61,36 +61,18 @@
                     </tr>
                   </thead>
                   <tbody>
+                    {% for ticket in tickets %}
                     <tr>
-                      <td>65488</td>
-                      <td>Sem acesso ao Sistema</td>
+                      <td>{{ticket.id}}</td>
+                      <td>{{ticket.titulo}}</td>
                       <td>
-                        <span class="badge bg-primary"
-                          >Aguardando Resposta</span
+                        <span
+                          class="badge {% if ticket.status == 'OPEN' %} bg-primary {% elif ticket.status == 'EM_PROCESSO' %} bg-warning {% elif ticket.status == 'RESOLVIDO' %} bg-success {% else %} bg-danger {% endif %}"
+                          >{{ticket.status}}</span
                         >
                       </td>
                     </tr>
-                    <tr>
-                      <td>34567</td>
-                      <td>Esquecimento de senha</td>
-                      <td>
-                        <span class="badge bg-success">Resolvido</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>85469</td>
-                      <td>Cards Sumiram</td>
-                      <td>
-                        <span class="badge bg-warning">Em processo</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>54378</td>
-                      <td>Notas errada no sistema</td>
-                      <td>
-                        <span class="badge bg-danger">Cancelado</span>
-                      </td>
-                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>

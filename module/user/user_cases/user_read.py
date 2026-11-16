@@ -13,11 +13,11 @@ class UserRead:
 
     def find_all(
         self,
-        name: str | None,
-        cpf: str | None,
-        email: str | None,
-        role: str | None,
-        perfil: str | None,
+        name: str | None = None,
+        cpf: str | None = None,
+        email: str | None = None,
+        role: str | None = None,
+        perfil: str | None = None,
     ) -> list[UserDTO]:
 
         with self.SessionLocal() as session:

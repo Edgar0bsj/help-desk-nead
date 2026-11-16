@@ -54,17 +54,30 @@
                   <div class="card-content">
                     <div class="card-body">
                       {# -form- #}
-                      <form class="form form-vertical">
+                      <form
+                        class="form form-vertical"
+                        method="post"
+                        action="{{ url_for('new-ticket') }}"
+                      >
+                        <input
+                          type="hidden"
+                          name="fk_user_id"
+                          value="{{user_id}}"
+                        />
                         <div class="form-body">
                           <div class="row">
                             <div class="col-12">
                               <div class="form-group">
                                 <label for="first-name-vertical">Produto</label>
                                 <fieldset class="form-group">
-                                  <select class="form-select" id="basicSelect">
-                                    <option>EAD</option>
-                                    <option>SEMI PRESENCIAL</option>
-                                    <option>PRESENCIAL</option>
+                                  <select class="form-select" name="produto">
+                                    <option value="EAD">EAD</option>
+                                    <option value="SEMI_PRESENCIAL">
+                                      SEMI PRESENCIAL
+                                    </option>
+                                    <option value="PRESENCIAL">
+                                      PRESENCIAL
+                                    </option>
                                   </select>
                                 </fieldset>
                               </div>
@@ -74,7 +87,7 @@
                                 <label for="email-id-vertical">Titulo</label>
                                 <input
                                   type="text"
-                                  id="email-id-vertical"
+                                  name="titulo"
                                   class="form-control"
                                   name="email-id"
                                   placeholder="Titulo"
@@ -90,9 +103,14 @@
                                 >
                                 <textarea
                                   class="form-control"
-                                  id="exampleFormControlTextarea1"
+                                  name="descricao"
                                   rows="6"
+                                  maxlength="400"
+                                  oninput="atualizarContador(this)"
                                 ></textarea>
+                                <div class="form-text text-end" id="contador">
+                                  400 caracteres restantes
+                                </div>
                               </div>
                             </div>
                             <div class="col-12">
@@ -102,7 +120,7 @@
                                 >
                                 <input
                                   type="number"
-                                  id="password-vertical"
+                                  name="numero"
                                   class="form-control"
                                   name="contact"
                                   placeholder="Exemplo: 21911111111"
@@ -143,5 +161,15 @@
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
 
     <script src="/assets/js/main.js"></script>
+    <script hidden>
+      function atualizarContador(textarea) {
+        const maxLength = textarea.getAttribute("maxlength");
+        const currentLength = textarea.value.length;
+        const restantes = maxLength - currentLength;
+
+        const contadorDiv = document.getElementById("contador");
+        contadorDiv.textContent = `${restantes} caracteres restantes`;
+      }
+    </script>
   </body>
 </html>

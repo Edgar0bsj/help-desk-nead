@@ -83,11 +83,23 @@ def user_save(
 def get_user_perfil(id: str):
     user = user_ctrl.find_by_id(id)
 
+    if not user:
+        return None
+
     user.name = user.name.title()
 
     nome_list = user.name.split()
     iniciais = "".join(e[0] for e in nome_list)
 
     user.perfil = iniciais[:2]
+
+    return user
+
+
+def get_user(id: str):
+    user = user_ctrl.find_by_id(id)
+
+    if not user:
+        return None
 
     return user
